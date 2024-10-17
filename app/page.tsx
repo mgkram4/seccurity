@@ -120,13 +120,13 @@ print(f"1010 + 1011 = {add_binary('1010', '1011')}")
             <li>The process of converting analog data to digital format</li>
             <li>Concepts of digital copyright and licensing</li>
           </ul>
-          <p className="mb-4 text-gray-700">Understanding these concepts is crucial for anyone working with digital systems and forms the foundation for more advanced topics in computer science and information technology. As you progress in your studies, you'll find these fundamental principles underlying many complex systems and algorithms.</p>
+          <p className="mb-4 text-gray-700">Understanding these concepts is crucial for anyone working with digital systems and forms the foundation for more advanced topics in computer science and information technology. As you progress in your studies, youll find these fundamental principles underlying many complex systems and algorithms.</p>
         </section>
         <section className="mb-12">
           <h2 className="text-3xl font-semibold mb-4 text-blue-500">3. Hexadecimal Numbers</h2>
           <div className="mb-6">
             <h3 className="text-2xl font-medium mb-2 text-blue-400">Theory</h3>
-            <p className="mb-4 text-gray-700">Hexadecimal is a base-16 number system, using 16 distinct symbols: the numbers 0-9 and the letters A-F. It's widely used in computing and digital systems for several reasons:</p>
+            <p className="mb-4 text-gray-700">Hexadecimal is a base-16 number system, using 16 distinct symbols: the numbers 0-9 and the letters A-F. Its widely used in computing and digital systems for several reasons:</p>
             <ul className="list-disc list-inside mb-4 text-gray-700">
               <li>Compact representation of binary data</li>
               <li>Easier for humans to read and write compared to long binary strings</li>
@@ -226,7 +226,7 @@ demonstrate_integer_overflow()
             <ul className="list-disc list-inside mb-4 text-gray-700">
               <li><strong>ASCII (American Standard Code for Information Interchange):</strong> A 7-bit encoding system that represents 128 characters, including English letters, numbers, and basic punctuation.</li>
               <li><strong>Unicode:</strong> A universal character encoding standard that aims to represent all writing systems in the world. It includes over 140,000 characters.</li>
-              <li><strong>UTF-8:</strong> A variable-width encoding that uses 1 to 4 bytes per character. It's backward compatible with ASCII and is widely used on the internet.</li>
+              <li><strong>UTF-8:</strong> A variable-width encoding that uses 1 to 4 bytes per character. Its backward compatible with ASCII and is widely used on the internet.</li>
             </ul>
             <p className="mb-4 text-gray-700">Understanding text encoding is crucial for:</p>
             <ul className="list-disc list-inside mb-4 text-gray-700">
@@ -308,7 +308,7 @@ print(f"First 10 digital values: {digital_signal[:10]}")
 
         <section className="mb-12">
           <h2 className="text-3xl font-semibold mb-4 text-blue-500">Conclusion and Further Study</h2>
-          <p className="mb-4 text-gray-700">This unit has provided a comprehensive introduction to the fundamental concepts of digital information. As you progress in your study of computer science and information technology, you'll find these principles underlying many advanced topics:</p>
+          <p className="mb-4 text-gray-700">This unit has provided a comprehensive introduction to the fundamental concepts of digital information. As you progress in your study of computer science and information technology, youll find these principles underlying many advanced topics:</p>
           <ul className="list-disc list-inside mb-4 text-gray-700">
             <li>Digital circuit design and computer architecture</li>
             <li>Data compression algorithms and information theory</li>
