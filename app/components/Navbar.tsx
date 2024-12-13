@@ -15,6 +15,8 @@ const ModernNavbar = () => {
     { id: 3, title: 'Unit 3: Programming' },
     { id: 4, title: 'Unit 4: Data Structures' },
     { id: 5, title: 'Unit 5: Algorithms' },
+    { id: 6, title: 'Unit 6: Cyber Attacks' },
+    { id: 7, title: 'Unit 7: Defense & Incident Response' },
   ];
 
   const toggleDropdown = () => {
