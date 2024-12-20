@@ -1,121 +1,219 @@
 'use client';
 
-import { BeakerIcon, BookOpenIcon, ChevronDownIcon, DocumentTextIcon } from '@heroicons/react/24/solid';
+import { Bars3Icon, BeakerIcon, BookOpenIcon, ChevronDownIcon, CodeBracketIcon, DocumentTextIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const ModernNavbar = () => {
   const pathname = usePathname();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const dropdownRef = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scrolling effect
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const units = [
-    { id: 1, title: 'Unit 1: Digital Information' },
-    { id: 2, title: 'Unit 2: Computer Hardware' },
-    { id: 3, title: 'Unit 3: Programming' },
-    { id: 4, title: 'Unit 4: Data Structures' },
-    { id: 5, title: 'Unit 5: Algorithms' },
-    { id: 6, title: 'Unit 6: Cyber Attacks' },
-    { id: 7, title: 'Unit 7: Defense & Incident Response' },
+    { id: 1, title: 'Digital Information' },
+    { id: 2, title: 'Computer Hardware' },
+    { id: 3, title: 'Programming' },
+    { id: 4, title: 'Data Structures' },
+    { id: 5, title: 'Algorithms' },
+    { id: 6, title: 'Cyber Attacks' },
+    { id: 7, title: 'Defense & Incident Response' },
   ];
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  // Improved dropdown menu component
+  const DropdownMenu = ({ unit, isActive }) => (
+    <AnimatePresence>
+      {isActive && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.2 }}
+          className="absolute top-full left-0 mt-2 w-60 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50"
+        >
+          <div className="p-2">
+            <Link
+              href={`/unit${unit.id}`}
+              className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 rounded-md transition-colors"
+            >
+              <BookOpenIcon className="h-5 w-5 mr-2 text-blue-500" />
+              <span>Overview</span>
+            </Link>
+            <Link
+              href={`/unit${unit.id}/exercises`}
+              className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 rounded-md transition-colors"
+            >
+              <BeakerIcon className="h-5 w-5 mr-2 text-blue-500" />
+              <span>Exercises</span>
+            </Link>
+            <Link
+              href={`/unit${unit.id}/terminology`}
+              className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 rounded-md transition-colors"
+            >
+              <DocumentTextIcon className="h-5 w-5 mr-2 text-blue-500" />
+              <span>Terminology</span>
+            </Link>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg">
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${
+      scrolled ? 'bg-white shadow-md' : 'bg-white'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-center space-x-4">
-                {units.map((unit) => (
-                  <div key={unit.id} className="relative group">
-                    <div className="flex items-center space-x-1">
-                      <Link
-                        href={`/unit${unit.id}`}
-                        className={`text-white hover:bg-blue-500 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out ${
-                          pathname.startsWith(`/unit${unit.id}`) ? 'bg-blue-700' : ''
-                        }`}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <BookOpenIcon className="h-5 w-5" />
-                          <span>{unit.title}</span>
-                        </div>
-                      </Link>
-                      <div className="absolute top-full left-0 mt-1 w-48 hidden group-hover:block">
-                        <div className="bg-white rounded-md shadow-lg py-1">
-                          <Link
-                            href={`/unit${unit.id}/exercises`}
-                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
-                          >
-                            <BeakerIcon className="h-5 w-5 mr-2 text-blue-500" />
-                            <span>Exercises</span>
-                          </Link>
-                          <Link
-                            href={`/unit${unit.id}/terminology`}
-                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
-                          >
-                            <DocumentTextIcon className="h-5 w-5 mr-2 text-blue-500" />
-                            <span>Terminology</span>
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2">
+            <CodeBracketIcon className="h-8 w-8 text-blue-600" />
+            <span className="text-gray-900 font-bold text-xl">CSLearning</span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-1">
+            <div className="flex items-center space-x-2">
+              {units.map((unit) => (
+                <div 
+                  key={unit.id} 
+                  className="relative"
+                  ref={dropdownRef}
+                >
+                  <button
+                    onClick={() => setActiveDropdown(activeDropdown === unit.id ? null : unit.id)}
+                    className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                      ${pathname.startsWith(`/unit${unit.id}`) 
+                        ? 'bg-blue-100 text-blue-700' 
+                        : 'text-gray-700 hover:bg-gray-100'}`}
+                  >
+                    <span>Unit {unit.id}</span>
+                    <ChevronDownIcon className={`h-4 w-4 ml-1 transition-transform duration-200 
+                      ${activeDropdown === unit.id ? 'transform rotate-180' : ''}`} />
+                  </button>
+                  <DropdownMenu unit={unit} isActive={activeDropdown === unit.id} />
+                </div>
+              ))}
+              <Link
+                href="/project1"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                  ${pathname === '/project1' 
+                    ? 'bg-green-100 text-green-700' 
+                    : 'text-gray-700 hover:bg-gray-100'}`}
+              >
+                Project 1
+              </Link>
             </div>
           </div>
 
-          <div className="-mr-2 flex md:hidden">
-            <button
-              onClick={toggleDropdown}
-              className="inline-flex items-center justify-center p-2 rounded-md text-blue-200 hover:text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-600 focus:ring-white transition duration-150 ease-in-out"
-            >
-              <span className="sr-only">Open menu</span>
-              <ChevronDownIcon className={`h-6 w-6 transform ${isDropdownOpen ? 'rotate-180' : ''} transition-transform duration-150`} />
-            </button>
-          </div>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none"
+          >
+            {mobileMenuOpen ? (
+              <XMarkIcon className="h-6 w-6" />
+            ) : (
+              <Bars3Icon className="h-6 w-6" />
+            )}
+          </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {isDropdownOpen && (
-        <div className="md:hidden" id="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {units.map((unit) => (
-              <div key={unit.id} className="space-y-1">
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-white border-t"
+          >
+            <div className="max-h-[80vh] overflow-y-auto">
+              <div className="px-4 py-2 space-y-1">
+                {units.map((unit) => (
+                  <div key={unit.id} className="space-y-1">
+                    <button
+                      onClick={() => setActiveDropdown(activeDropdown === unit.id ? null : unit.id)}
+                      className={`w-full flex items-center justify-between p-3 rounded-lg text-left
+                        ${pathname.startsWith(`/unit${unit.id}`) 
+                          ? 'bg-blue-100 text-blue-700' 
+                          : 'text-gray-700 hover:bg-gray-50'}`}
+                    >
+                      <span>Unit {unit.id}: {unit.title}</span>
+                      <ChevronDownIcon className={`h-5 w-5 transition-transform duration-200 
+                        ${activeDropdown === unit.id ? 'transform rotate-180' : ''}`} />
+                    </button>
+                    <AnimatePresence>
+                      {activeDropdown === unit.id && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="pl-4 space-y-1"
+                        >
+                          <Link
+                            href={`/unit${unit.id}`}
+                            className="flex items-center p-3 rounded-lg text-gray-600 hover:bg-gray-50"
+                          >
+                            <BookOpenIcon className="h-5 w-5 mr-2 text-blue-500" />
+                            Overview
+                          </Link>
+                          <Link
+                            href={`/unit${unit.id}/exercises`}
+                            className="flex items-center p-3 rounded-lg text-gray-600 hover:bg-gray-50"
+                          >
+                            <BeakerIcon className="h-5 w-5 mr-2 text-blue-500" />
+                            Exercises
+                          </Link>
+                          <Link
+                            href={`/unit${unit.id}/terminology`}
+                            className="flex items-center p-3 rounded-lg text-gray-600 hover:bg-gray-50"
+                          >
+                            <DocumentTextIcon className="h-5 w-5 mr-2 text-blue-500" />
+                            Terminology
+                          </Link>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
                 <Link
-                  href={`/unit${unit.id}`}
-                  className={`flex items-center text-white hover:bg-blue-500 px-3 py-2 rounded-md text-base font-medium ${
-                    pathname.startsWith(`/unit${unit.id}`) ? 'bg-blue-700' : ''
-                  }`}
+                  href="/project1"
+                  className={`block p-3 rounded-lg
+                    ${pathname === '/project1' 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'text-gray-700 hover:bg-gray-50'}`}
                 >
-                  <BookOpenIcon className="h-5 w-5 mr-2" />
-                  <span>{unit.title}</span>
-                </Link>
-                <Link
-                  href={`/unit${unit.id}/exercises`}
-                  className="flex items-center text-white hover:bg-blue-500 px-3 py-2 rounded-md text-base font-medium pl-8"
-                >
-                  <BeakerIcon className="h-5 w-5 mr-2" />
-                  <span>Exercises</span>
-                </Link>
-                <Link
-                  href={`/unit${unit.id}/terminology`}
-                  className="flex items-center text-white hover:bg-blue-500 px-3 py-2 rounded-md text-base font-medium pl-8"
-                >
-                  <DocumentTextIcon className="h-5 w-5 mr-2" />
-                  <span>Terminology</span>
+                  Project 1
                 </Link>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
 };
 
