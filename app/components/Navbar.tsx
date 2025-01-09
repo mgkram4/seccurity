@@ -108,7 +108,7 @@ const ModernNavbar = ({ className }: NavbarProps) => {
                   <div 
                     key={unit.id} 
                     className="relative"
-                    ref={(el) => (dropdownRefs.current[unit.id] = el)}
+                    ref={el => { dropdownRefs.current[unit.id] = el }}
                   >
                     <button
                       onClick={(e) => {
